@@ -67,6 +67,11 @@ Application::Application(int& argc, char** argv)
 #if defined(Q_OS_UNIX)
     registerUnixSignals();
 #endif
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+    // On case-sensitive Operating Systems, initialize Config early to use
+    // the native application name instead of the camel-case name defined later
+    Q_UNUSED(config());
+#endif
 
     QString userName = qgetenv("USER");
     if (userName.isEmpty()) {
